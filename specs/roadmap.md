@@ -1,6 +1,6 @@
 # Roadmap
 
-## Fase 0 — Andamiaje del proyecto
+## ✅ Fase 0 — Andamiaje del proyecto
 - Inicializar repositorio con `uv init`
 - Crear virtualenv con `uv venv` y fijar versión de Python
 - Configurar `.env` (keys de Qwen/Dashscope y Tavily)

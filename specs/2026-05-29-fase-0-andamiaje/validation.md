@@ -81,11 +81,11 @@ git diff main --name-only
 
 ### Checklist manual antes de hacer push
 
-- [ ] `uv run python --version` → Python 3.13.x
-- [ ] `pyproject.toml` tiene `requires-python = ">=3.13"`
-- [ ] `.env` no aparece en `git status`
-- [ ] `.env.example` está en git con solo las dos variables de Photo-Chef
-- [ ] `backend/__init__.py` existe
-- [ ] `frontend/` existe
-- [ ] `git branch --show-current` → `feat/fase-0-andamiaje`
-- [ ] La rama ha sido pusheada al remote de GitHub
+- [x] `uv run python --version` → Python 3.13.x
+- [x] `pyproject.toml` tiene `requires-python = ">=3.13"`
+- [x] `.env` no aparece en `git status`
+- [x] `.env.example` está en git con solo las dos variables de Photo-Chef
+- [x] `backend/__init__.py` existe
+- [x] `frontend/` existe
+- [x] `git branch --show-current` → `feat/fase-0-andamiaje`
+- [x] La rama ha sido pusheada al remote de GitHub
