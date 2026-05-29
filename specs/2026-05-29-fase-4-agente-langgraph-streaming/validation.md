@@ -3,53 +3,53 @@
 ## Criterios de aceptación
 
 ### Instalación y dependencias
-- [ ] `langgraph` aparece en `pyproject.toml` tras `uv add langgraph`
-- [ ] `uv run python -c "import langgraph"` no lanza errores
+- [x] `langgraph` aparece en `pyproject.toml` tras `uv add langgraph`
+- [x] `uv run python -c "import langgraph"` no lanza errores
 
 ### Herramientas del agente (`backend/agent_tools.py`)
-- [ ] `analyze_image_tool` es un `@tool` de LangGraph que acepta imagen en base64
+- [x] `analyze_image_tool` es un `@tool` de LangGraph que acepta imagen en base64
       y devuelve la lista de ingredientes como string
-- [ ] `search_recipes_tool` es un `@tool` de LangGraph que acepta una lista de
+- [x] `search_recipes_tool` es un `@tool` de LangGraph que acepta una lista de
       ingredientes y devuelve resultados de búsqueda como string
-- [ ] Ambas tools tienen docstrings claros (el agente los usa para decidir cuándo invocarlas)
+- [x] Ambas tools tienen docstrings claros (el agente los usa para decidir cuándo invocarlas)
 
 ### Agente (`backend/agent.py`)
-- [ ] El grafo se construye con `create_react_agent` y las dos tools
-- [ ] El system prompt instruye al agente a responder en español si no hay texto
+- [x] El grafo se construye con `create_react_agent` y las dos tools
+- [x] El system prompt instruye al agente a responder en español si no hay texto
       del usuario, y en el idioma del texto si lo hay
-- [ ] El system prompt pide estructurar la receta con Markdown (h2, h3, listas)
-- [ ] `ChatQwen` se instancia con `enable_thinking=True` y `thinking_budget=200`
-- [ ] Se usa `thread_id="default"` como stub sin `MemorySaver`
+- [x] El system prompt pide estructurar la receta con Markdown (h2, h3, listas)
+- [x] `ChatQwen` se instancia con `enable_thinking=True` y `thinking_budget=200`
+- [x] Se usa `thread_id="default"` como stub sin `MemorySaver`
 
 ### Filtrado de tokens de razonamiento
-- [ ] `strip_thinking_tokens("<think>razonamiento</think> texto visible")` 
+- [x] `strip_thinking_tokens("<think>razonamiento</think> texto visible")` 
       devuelve `" texto visible"` (sin el bloque think)
-- [ ] `strip_thinking_tokens("texto sin think")` devuelve `"texto sin think"` 
+- [x] `strip_thinking_tokens("texto sin think")` devuelve `"texto sin think"` 
       sin modificaciones
-- [ ] Bloques `<think>` anidados o incompletos no rompen la función
+- [x] Bloques `<think>` anidados o incompletos no rompen la función
 
 ### Endpoint `POST /chat`
-- [ ] Existe en `backend/main.py` y devuelve `StreamingResponse` con
+- [x] Existe en `backend/main.py` y devuelve `StreamingResponse` con
       `media_type="text/event-stream"`
-- [ ] Acepta `multipart/form-data` con campos `image`, `message` y `session_id`
-- [ ] Rechaza imágenes con formato no soportado con status `422` y mensaje claro,
+- [x] Acepta `multipart/form-data` con campos `image`, `message` y `session_id`
+- [x] Rechaza imágenes con formato no soportado con status `422` y mensaje claro,
       antes de iniciar el stream
-- [ ] El stream emite al menos un evento `event: status` con el mensaje
+- [x] El stream emite al menos un evento `event: status` con el mensaje
       `"Analizando tu refrigerador…"` para cada petición
-- [ ] El stream emite al menos un evento `event: status` con el mensaje
+- [x] El stream emite al menos un evento `event: status` con el mensaje
       `"Buscando recetas en internet…"` para cada petición
-- [ ] El stream emite al menos un evento `event: token` con texto de la receta
-- [ ] El stream termina con un evento `event: done`
-- [ ] Los tokens `<think>...</think>` nunca aparecen en los eventos `token`
+- [x] El stream emite al menos un evento `event: token` con texto de la receta
+- [x] El stream termina con un evento `event: done`
+- [x] Los tokens `<think>...</think>` nunca aparecen en los eventos `token`
       enviados al cliente
-- [ ] El endpoint responde correctamente cuando `message` está vacío (primera consulta)
+- [x] El endpoint responde correctamente cuando `message` está vacío (primera consulta)
 
 ### Tests
-- [ ] `tests/test_agent.py` (o equivalente) incluye test unitario de
+- [x] `tests/test_agent.py` (o equivalente) incluye test unitario de
       `strip_thinking_tokens` con al menos 3 casos
-- [ ] Test de integración de `/chat` con una imagen JPEG real:
+- [x] Test de integración de `/chat` con una imagen JPEG real:
       el stream contiene eventos `status` y `token`
-- [ ] `uv run pytest` pasa sin errores
+- [x] `uv run pytest` pasa sin errores
 
 ### Verificación manual
 - [ ] Con `curl` o Postman: enviar una foto de refrigerador a `POST /chat`

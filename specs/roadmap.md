@@ -31,7 +31,7 @@
 - Configurar `qwen3.5-flash` con `enable_thinking=True` y `thinking_budget=200`
   para la síntesis de la receta
 
-## Fase 4 — Agente LangGraph con streaming
+## ✅ Fase 4 — Agente LangGraph con streaming
 - Instalar `langgraph`
 - Construir agente ReAct con `create_react_agent`:
   - Herramienta 1: análisis de imagen (qwen-vl-plus)
