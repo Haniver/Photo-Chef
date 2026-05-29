@@ -13,7 +13,7 @@
 - Configurar CORS para permitir el dev server de Svelte (`localhost:5173`)
 - Servir la carpeta `frontend/dist/` como archivos estáticos desde FastAPI
 
-## Fase 2 — Pipeline de visión
+## ✅ Fase 2 — Pipeline de visión
 - Instalar `langchain-openai`, `openai` (el endpoint de Dashscope usa el protocolo OpenAI)
 - Implementar función que recibe una imagen (base64) y devuelve la lista de ingredientes
   usando `qwen-vl-plus` vía `ChatOpenAI` apuntando al endpoint compatible de Dashscope
