@@ -7,7 +7,7 @@
 - Definir estructura de carpetas: `backend/`, `frontend/`, `specs/`
 - Crear `.gitignore` (excluir `.env`, `__pycache__`, `node_modules`, `dist/`, `.venv/`)
 
-## Fase 1 — Esqueleto del backend
+## ✅ Fase 1 — Esqueleto del backend
 - Instalar dependencias base con `uv add`: FastAPI, uvicorn, python-dotenv
 - Endpoint `GET /health` que confirma que el servidor corre en `localhost:8005`
 - Configurar CORS para permitir el dev server de Svelte (`localhost:5173`)
