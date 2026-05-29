@@ -23,7 +23,7 @@
 - Si la identificación es incierta, el agente continúa e incluye advertencia
   al usuario sobre la baja confianza en los ingredientes detectados
 
-## Fase 3 — Búsqueda de recetas
+## ✅ Fase 3 — Búsqueda de recetas
 - Instalar `langchain-tavily` (`TavilySearchResults`)
 - Implementar herramienta de búsqueda que toma la lista de ingredientes
   y devuelve resultados relevantes de recetas desde internet

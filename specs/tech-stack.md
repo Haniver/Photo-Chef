@@ -27,7 +27,7 @@ esos archivos estáticos directamente con `StaticFiles`.
 |---|---|---|
 | Orquestador de agente | LangGraph (`create_react_agent`) | Patrón ReAct moderno, soporta streaming |
 | Memoria de sesión | `MemorySaver` (LangGraph) | Solo en RAM, por `session_id` |
-| Integración LLM | `langchain-openai` (`ChatOpenAI`) | Endpoint OpenAI-compatible de Dashscope |
+| Integración LLM | `langchain-qwq` (`ChatQwen`) | Wrapper nativo para Dashscope |
 | Herramienta de visión | `qwen-vl-plus` (multimodal) | Identifica ingredientes; una foto por sesión |
 | Herramienta de búsqueda | Tavily (`TavilySearchResults`) | Busca recetas en internet |
 
@@ -45,24 +45,16 @@ foto (base64)
 
 | Modelo | Uso | Provider | Integración LangChain |
 |---|---|---|---|
-| `qwen-vl-plus` | Análisis de imagen → ingredientes | Alibaba Dashscope | `ChatOpenAI` apuntando al endpoint OpenAI-compatible de Dashscope |
-| `qwen3.5-flash` | Síntesis de receta + conversación | Alibaba Dashscope | `ChatOpenAI` apuntando al endpoint OpenAI-compatible de Dashscope |
+| `qwen-vl-plus` | Análisis de imagen → ingredientes | Alibaba Dashscope | `ChatQwen` de `langchain-qwq` |
+| `qwen3.5-flash` | Síntesis de receta + conversación | Alibaba Dashscope | `ChatQwen` de `langchain-qwq` |
 
-Ambos se acceden vía la misma clave (`DASHSCOPE_API_KEY` en `.env`) usando el endpoint
-OpenAI-compatible: `https://dashscope.aliyuncs.com/compatible-mode/v1`.
-
-### Por qué endpoint OpenAI-compatible para visión
-
-Se prefiere `ChatOpenAI` con el endpoint compatible sobre `ChatTongyi` (wrapper nativo
-de LangChain) porque el protocolo OpenAI para mensajes multimodales está más probado,
-tiene mayor cobertura de casos edge en imágenes, y es más estable frente a cambios
-en la API de Dashscope.
+Ambos se acceden vía la misma clave (`DASHSCOPE_API_KEY` en `.env`).
 
 ### Razonamiento de `qwen3.5-flash`
 
-El modelo se usa con `enable_thinking=True` y `thinking_budget=200` (tokens de
-razonamiento interno). Suficiente para tareas de síntesis y conversación sin
-incurrir en el coste de un presupuesto de razonamiento alto.
+El modelo se usa con `thinking_budget=200` (tokens de razonamiento interno).
+Suficiente para tareas de síntesis y conversación sin incurrir en el coste
+de un presupuesto de razonamiento alto.
 
 ## Idioma de respuesta
 
