@@ -1,61 +1,63 @@
 # Photo-Chef
 
-Photo-Chef identifica los ingredientes de tu refrigerador a partir de una foto y sugiere una receta.
+Toma una foto de tu refrigerador y recibe una receta hecha con lo que tienes.
 
-## Instalación
+## Requisitos previos
 
-```bash
-uv sync
-cp .env.example .env   # añade DASHSCOPE_API_KEY y TAVILY_API_KEY
+- Python ≥ 3.13 y [`uv`](https://docs.astral.sh/uv/)
+- Node.js ≥ 20
+- Archivo `.env` en la raíz con las siguientes claves:
+
+```
+DASHSCOPE_API_KEY=<tu clave de Alibaba Dashscope>
+TAVILY_API_KEY=<tu clave de Tavily>
 ```
 
-## Ejecución
+## Desarrollo
+
+Arranca backend y frontend por separado en dos terminales:
 
 ```bash
-uv run uvicorn backend.main:app --port 8005
+# Terminal 1 — backend (con recarga automática)
+uv run uvicorn backend.main:app --port 8005 --reload
+
+# Terminal 2 — frontend
+cd frontend && npm run dev
 ```
+
+La app estará disponible en `http://localhost:5173` (frontend dev server).
+
+## Producción
+
+Compila el frontend y arranca el servidor con un solo comando:
+
+```bash
+./start.sh
+```
+
+La app estará disponible en `http://localhost:8005`.
 
 ## API
 
 ### `GET /health`
-Comprueba que el servidor está corriendo.
-
-### `POST /analyze-image`
-Analiza una imagen de refrigerador.  
-Body JSON: `{"image": "<base64>"}` → devuelve lista de ingredientes.
-
-### `POST /recipe`
-Genera una receta a partir de ingredientes.  
-Body JSON: `{"ingredients": [{"name": "...", "confidence": 0.9}]}` → devuelve Markdown.
+Devuelve `{"status": "ok", "version": "0.1.0"}`.
 
 ### `POST /chat` — SSE streaming
+
 Endpoint principal. Acepta `multipart/form-data`:
 
 | Campo | Tipo | Descripción |
 |---|---|---|
 | `image` | file (JPEG/PNG/WEBP) | Foto del refrigerador |
 | `message` | string (opcional) | Texto del usuario |
-| `session_id` | string (opcional) | ID de sesión (stub, Fase 5) |
+| `session_id` | string (opcional) | ID de sesión para memoria de conversación |
 
-Devuelve un stream `text/event-stream` con tres tipos de eventos:
+Devuelve `text/event-stream` con eventos `status`, `token` y `done`.
 
-```
-event: status
-data: {"message": "Analizando tu refrigerador…"}
-
-event: token
-data: {"text": "## Tortilla de patatas\n"}
-
-event: done
-data: {}
-```
-
-Ejemplo con `curl`:
 ```bash
 curl -N -X POST http://localhost:8005/chat \
-  -F "image=@/ruta/a/fridge.jpg" \
-  -F "message=" \
-  -F "session_id=test"
+  -F "image=@fridge.jpg" \
+  -F "session_id=mi-sesion"
 ```
 
 ## Tests

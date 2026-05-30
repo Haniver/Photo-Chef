@@ -69,7 +69,7 @@
 - `session_id` generado al cargar la página (UUID en memoria)
 - Manejo de errores visible al usuario (imagen inválida, timeout, error del agente)
 
-## Fase 7 — Integración y producción
+## ✅ Fase 7 — Integración y producción
 - Script de build: `npm run build` en `frontend/` genera `frontend/dist/`
 - FastAPI sirve `frontend/dist/` en la raíz `/`
 - Verificar que toda la app corre con un solo comando: `uv run uvicorn backend.main:app --port 8005`
