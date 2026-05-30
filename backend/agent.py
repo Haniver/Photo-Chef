@@ -3,8 +3,12 @@
 import os
 import re
 
+from langchain_core.tools import tool
 from langchain_qwq import ChatQwen
+from langgraph.checkpoint.memory import MemorySaver
 from langgraph.prebuilt import create_react_agent
+
+_memory = MemorySaver()
 
 _SYSTEM_PROMPT = """\
 Eres Photo-Chef, un asistente culinario experto.
@@ -22,6 +26,11 @@ Formato de la receta:
 Idioma de respuesta:
 - Si el usuario no incluye texto en su mensaje, responde en español.
 - Si el usuario incluye texto, responde en el mismo idioma que ese texto.
+
+Mensajes de seguimiento:
+- Si el historial ya contiene una receta, responde directamente las preguntas del
+  usuario sin volver a analizar la imagen ni buscar recetas, a menos que el usuario
+  pida explícitamente una nueva receta.
 """
 
 
@@ -83,16 +92,29 @@ class _ThinkStreamFilter:
         return "".join(output)
 
 
-def build_agent(analyze_image_tool):
+def build_agent(image_b64: str | None):
     """Build a ReAct agent for a single chat request.
 
     Args:
-        analyze_image_tool: A LangGraph @tool wrapping image analysis for this request.
+        image_b64: Base64-encoded refrigerator image for the first request,
+                   or None for follow-up messages (no new image).
 
     Returns:
         Compiled LangGraph CompiledStateGraph.
     """
-    from backend.agent_tools import search_recipes_tool
+    from backend.agent_tools import make_analyze_image_tool, search_recipes_tool
+
+    if image_b64 is not None:
+        analyze_image_tool = make_analyze_image_tool(image_b64)
+    else:
+        @tool
+        def analyze_image_tool() -> str:  # type: ignore[misc]
+            """Analyze the user's refrigerator photo and return a comma-separated list of
+            detected ingredients. Call this tool first, before searching for recipes."""
+            return (
+                "No se ha proporcionado imagen nueva. "
+                "Usa el historial de conversación para responder."
+            )
 
     llm = ChatQwen(
         model="qwen3.5-flash",
@@ -106,4 +128,5 @@ def build_agent(analyze_image_tool):
         llm,
         tools=[analyze_image_tool, search_recipes_tool],
         prompt=_SYSTEM_PROMPT,
+        checkpointer=_memory,
     )

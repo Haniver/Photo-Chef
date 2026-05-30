@@ -10,7 +10,6 @@ from langchain_core.messages import HumanMessage
 from pydantic import BaseModel
 
 from backend.agent import _ThinkStreamFilter, build_agent
-from backend.agent_tools import make_analyze_image_tool
 from backend.recipe import synthesize_recipe
 from backend.search import search_recipes
 from backend.vision import analyze_image, validate_image_format
@@ -109,26 +108,30 @@ def _sse(event_type: str, data: dict) -> str:
 
 @app.post("/chat")
 async def chat_endpoint(
-    image: UploadFile = File(...),
+    image: UploadFile | None = File(default=None),
     message: str = Form(default=""),
     session_id: str = Form(default=""),
 ):
-    image_bytes = await image.read()
-    image_b64 = base64.b64encode(image_bytes).decode()
+    image_b64: str | None = None
+    if image is not None:
+        image_bytes = await image.read()
+        image_b64 = base64.b64encode(image_bytes).decode()
 
-    try:
-        validate_image_format(image_b64)
-    except ValueError as e:
-        raise HTTPException(status_code=422, detail=str(e))
+        try:
+            validate_image_format(image_b64)
+        except ValueError as e:
+            raise HTTPException(status_code=422, detail=str(e))
 
-    analyze_tool = make_analyze_image_tool(image_b64)
-    agent = build_agent(analyze_tool)
+    agent = build_agent(image_b64)
 
     user_text = message.strip()
-    if user_text:
-        human_content = f"Analiza mi refrigerador y sugiere una receta. {user_text}"
+    if image_b64 is not None:
+        if user_text:
+            human_content = f"Analiza mi refrigerador y sugiere una receta. {user_text}"
+        else:
+            human_content = "Analiza mi refrigerador y sugiere una receta."
     else:
-        human_content = "Analiza mi refrigerador y sugiere una receta."
+        human_content = user_text or "Responde usando el contexto de nuestra conversación."
 
     inputs = {"messages": [HumanMessage(content=human_content)]}
     config = {"configurable": {"thread_id": session_id or "default"}}

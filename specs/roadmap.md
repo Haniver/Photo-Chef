@@ -46,7 +46,7 @@
 - El idioma de respuesta se determina en el system prompt según si el mensaje
   del usuario tiene texto o no
 
-## Fase 5 — Memoria de sesión
+## ✅ Fase 5 — Memoria de sesión
 - Integrar `MemorySaver` de LangGraph para mantener contexto en RAM
 - Identificar sesiones por `session_id` (generado en el frontend al cargar la página)
 - El agente recuerda la receta presentada para responder preguntas de seguimiento
