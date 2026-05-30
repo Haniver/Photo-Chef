@@ -1,0 +1,36 @@
+:root {
+  --color-bg: #fdf8f3;
+  --color-surface: #fff9f4;
+  --color-accent: #e8622a;
+  --color-accent-hover: #d4531f;
+  --color-accent-light: #fef0e8;
+  --color-sage: #6b8f6b;
+  --color-sage-light: #edf3ed;
+  --color-text: #2d2016;
+  --color-text-muted: #7a6455;
+  --color-border: #e8d9cc;
+  --max-width: 720px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+}
+
+#app {
+  height: 100%;
+}

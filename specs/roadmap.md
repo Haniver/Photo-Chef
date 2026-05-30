@@ -52,7 +52,7 @@
 - El agente recuerda la receta presentada para responder preguntas de seguimiento
 - El historial se pierde al cerrar o recargar la pestaña (by design)
 
-## Fase 6 — Frontend Svelte
+## ✅ Fase 6 — Frontend Svelte
 - Inicializar proyecto Svelte 5 + Vite en `frontend/`
 - Componente de carga de imagen: solo input tipo `file` (JPEG/PNG/WEBP),
   con preview antes de enviar; bloqueado una vez que inicia la conversación
